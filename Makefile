@@ -1,7 +1,7 @@
 SNAME ?= pouchdb
 NAME ?= elswork/pouchdb
 PORT ?= 5984:5984
-ARCH ?= amd64
+ARCH ?= arm
 ARCH2 ?= arm
 
 # HELP
