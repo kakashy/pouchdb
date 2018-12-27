@@ -15,7 +15,7 @@ LABEL mantainer="Eloy Lopez <elswork@gmail.com>" \
 
 ## Install build toolchain, install node deps and compile native add-ons
 RUN apk add --no-cache --virtual .gyp python make g++
-RUN npm install -g --unsafe-perm=true pouchdb-server && \
+RUN npm install -g --unsafe-perm=true pouchdb-server pouchdb-adapter-leveldb && \
 rm -rf /root/.[^.]* && \
 apk del g++ make python
 
