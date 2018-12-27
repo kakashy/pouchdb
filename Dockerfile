@@ -5,7 +5,7 @@ ARG VERSION
 LABEL mantainer="Eloy Lopez <elswork@gmail.com>" \
     org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.name="PouchDB" \
-    org.label-schema.description="PouchDB the Database that Syncs!" \
+    org.label-schema.description="PouchDB, the Database that Syncs!" \
     org.label-schema.url="https://deft.work" \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.vcs-url="https://github.com/DeftWork/PouchDB" \
