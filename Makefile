@@ -1,8 +1,15 @@
 SNAME ?= pouchdb
-NAME ?= elswork/pouchdb
+NAME ?= elswork/$(SNAME)
 PORT ?= 5984:5984
-ARCH ?= amd64
-ARCH2 ?= arm
+VER ?= `cat VERSION`
+BASE ?= 10-alpine
+BASENAME ?= node:$(BASE)
+ARCH2 ?= armv7l
+ARCH3 ?= aarch64
+GOARCH := $(shell uname -m)
+ifeq ($(GOARCH),x86_64)
+	GOARCH := amd64
+endif
 
 # HELP
 # This will output the help for each task
@@ -15,25 +22,36 @@ help: ## This help.
 .DEFAULT_GOAL := help
 
 # DOCKER TASKS
-# Build the container
+
+debug: ## Debug the container
+	docker build -t $(NAME):$(GOARCH) \
+	--build-arg BASEIMAGE=$(BASENAME) \
+	--build-arg VERSION=$(GOARCH)_$(VER) .
 build: ## Build the container
-	docker build --no-cache -t $(NAME):$(ARCH) --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+	docker build --no-cache -t $(NAME):$(GOARCH) \
+	--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 	--build-arg VCS_REF=`git rev-parse --short HEAD` \
-	--build-arg VERSION=$(ARCH)-`cat VERSION` . > ../builds/$(SNAME)_$(ARCH)_`date +"%Y%m%d_%H%M%S"`.txt
+	--build-arg BASEIMAGE=$(BASENAME) \
+	--build-arg VERSION=$(GOARCH)_$(VER) \
+	. > ../builds/$(SNAME)_$(GOARCH)_$(VER)_`date +"%Y%m%d_%H%M%S"`.txt
 tag: ## Tag the container
-	docker tag $(NAME):$(ARCH) $(NAME):$(ARCH)-`cat VERSION`
+	docker tag $(NAME):$(GOARCH) $(NAME):$(GOARCH)_$(VER)
 push: ## Push the container
-	docker push $(NAME):$(ARCH)-`cat VERSION`
-	docker push $(NAME):$(ARCH)	
+	docker push $(NAME):$(GOARCH)_$(VER)
+	docker push $(NAME):$(GOARCH)	
 deploy: build tag push
-manifest: ## Manifest the container
-	docker manifest create $(NAME):`cat VERSION` $(NAME):$(ARCH)-`cat VERSION` \
-	$(NAME):$(ARCH2)-`cat VERSION-$(ARCH2)`
-	docker manifest push --purge $(NAME):`cat VERSION`
-	docker manifest create $(NAME):latest $(NAME):$(ARCH) $(NAME):$(ARCH2)
+manifest: ## Create an push manifest
+	docker manifest create $(NAME):$(VER) \
+	$(NAME):$(GOARCH)_$(VER) \
+	$(NAME):$(ARCH2)_$(VER) \
+	$(NAME):$(ARCH3)_$(VER)
+	docker manifest push --purge $(NAME):$(VER)
+	docker manifest create $(NAME):latest $(NAME):$(GOARCH) \
+	$(NAME):$(ARCH2) \
+	$(NAME):$(ARCH3)
 	docker manifest push --purge $(NAME):latest
 run: ## Run the container
-	docker run -d -p $(PORT) --name my_$(SNAME) $(NAME):$(ARCH)
+	docker run -d -p $(PORT) --name my_$(SNAME) $(NAME):$(GOARCH)
 start: ## Start the container
 	docker start my_$(SNAME)
 stop: ## Stop the container
