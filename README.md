@@ -6,7 +6,7 @@ It enables applications to store data locally while offline, then synchronize it
 This container is compatible with arm & amd64 architectures (thanks to its [Multi-Arch](https://blog.docker.com/2017/11/multi-arch-all-the-things/) base image)
 
 ## Details
-- [Source Repository](https://github.com/DeftWork/PouchDB)
+- [Source Repository](https://github.com/elswork/PouchDB)
 - [Deft.Work my personal blog](http://deft.work)
 
 ## Getting Started
