@@ -26,7 +26,7 @@ In order everyone could take full advantages of the usage of this docker contain
 $ docker run -d \
     --name my-pouchdb \
     -p 5984:5984 \
-    elswork/pouchdb:latest
+    elswork/pouchdb
 ```
 `--name my-pouchdb` This is absolutely optional, it helps to me to easily identify and operate the container after the first execution.
 ```sh
@@ -35,4 +35,3 @@ $ docker stop my-pouchdb
 $ docker rm my-pouchdb
 ...
 ```
-`-p 5984:5984` Caddy will serve https by default.
