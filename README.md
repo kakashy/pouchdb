@@ -1,37 +1,33 @@
-# PouchDB for linux arm & amd64
+# PouchDB
 
-A [Docker](http://docker.com) image for [PouchDB](https://pouchdb.com/) an open-source JavaScript database inspired by [Apache CouchDB](http://couchdb.apache.org/) that is designed to run well within the browser.
-PouchDB was created to help web developers build applications that work as well offline as they do online.
-It enables applications to store data locally while offline, then synchronize it with CouchDB and compatible servers when the application is back online, keeping the user's data in sync no matter where they next login. 
-This container is compatible with arm & amd64 architectures (thanks to its [Multi-Arch](https://blog.docker.com/2017/11/multi-arch-all-the-things/) base image)
-
-## Details
-- [Source Repository](https://github.com/elswork/PouchDB)
-- [Deft.Work my personal blog](http://deft.work)
+This repository offers a regularly-updated Docker image for PouchDB Server.
 
 ## Getting Started
 
-This is a simple usage for testing proposes.
+To set the ball rolling:
 
 ```sh
-$ docker run -d -p 5984:5984 elswork/pouchdb:latest
-```
-
-Point your browser to `http://Docker-Host-IP:5984`.
-
-## My Real Usage Example
-
-In order everyone could take full advantages of the usage of this docker container, I'll describe my own real usage setup.
-```sh
-$ docker run -d \
+docker run -d \
     --name my-pouchdb \
     -p 5984:5984 \
-    elswork/pouchdb
+    waweruj/pouchdb
 ```
-`--name my-pouchdb` This is absolutely optional, it helps to me to easily identify and operate the container after the first execution.
+
 ```sh
 $ docker start my-pouchdb
 $ docker stop my-pouchdb
 $ docker rm my-pouchdb
-...
 ```
+
+## Data Persistence
+By default, the PouchDB server inside the container uses its internal storage mechanism. Any data written to the PouchDB instance will be stored within the container's local storage. However, it's crucial to be aware that this data is ephemeral and will not be persisted beyond the container's lifecycle.
+
+## Ephemeral Data
+Since no mounted file storage or external volumes are used, all data within the PouchDB server will be lost when the container is stopped or removed. This means that if you shut down the container or if it crashes, any data written to the PouchDB server will be gone.
+
+## Data Backup and Restore
+To ensure data preservation, it is recommended to implement a backup and restore mechanism outside the container. You can utilize PouchDB's built-in replication features or explore other backup solutions compatible with PouchDB to store data outside the container.
+
+## Important Note
+While the next update will offer mounted storage, if you require persistent data storage, consider configuring the PouchDB server to use an external database, such as CouchDB or other compatible databases, that can be mounted as a volume or run separately from the container.
+

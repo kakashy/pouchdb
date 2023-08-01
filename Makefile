@@ -1,8 +1,8 @@
 SNAME ?= pouchdb
-NAME ?= elswork/$(SNAME)
+NAME ?= waweruj/$(SNAME)
 PORT ?= 5984:5984
 VER ?= `cat VERSION`
-BASE ?= 10-alpine
+BASE ?= 18-alpine
 BASENAME ?= node:$(BASE)
 ARCH2 ?= armv7l
 ARCH3 ?= aarch64
